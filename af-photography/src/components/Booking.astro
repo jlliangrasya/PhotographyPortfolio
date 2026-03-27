@@ -1,0 +1,178 @@
+---
+---
+
+<section id="booking" class="py-20 md:py-28 bg-navy-800">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Heading -->
+    <div data-aos="fade-up" class="text-center mb-12">
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+        Book a Session
+      </h2>
+      <p class="text-silver-300 text-lg">
+        Fill out the form and we'll get back to you within 24 hours.
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form id="booking-form" data-aos="fade-up" data-aos-delay="100" class="space-y-6">
+      <div class="grid sm:grid-cols-2 gap-6">
+        <!-- Full Name -->
+        <div>
+          <label for="name" class="block text-silver-300 text-sm font-medium mb-2">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Juan Dela Cruz"
+            class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 placeholder-silver-500 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all"
+          />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-silver-300 text-sm font-medium mb-2">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="you@email.com"
+            class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 placeholder-silver-500 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all"
+          />
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6">
+        <!-- Phone -->
+        <div>
+          <label for="phone" class="block text-silver-300 text-sm font-medium mb-2">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            required
+            placeholder="09XX XXX XXXX"
+            class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 placeholder-silver-500 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all"
+          />
+        </div>
+
+        <!-- Service Type -->
+        <div>
+          <label for="service" class="block text-silver-300 text-sm font-medium mb-2">Service Type</label>
+          <select
+            id="service"
+            name="service"
+            required
+            class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all"
+          >
+            <option value="" disabled selected>Select a service</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Portrait">Portrait</option>
+            <option value="Event">Event</option>
+            <option value="Commercial">Commercial</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6">
+        <!-- Preferred Date -->
+        <div>
+          <label for="date" class="block text-silver-300 text-sm font-medium mb-2">Preferred Date</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            required
+            class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all"
+          />
+        </div>
+
+        <!-- Event Location -->
+        <div>
+          <label for="location" class="block text-silver-300 text-sm font-medium mb-2">Event Location</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            required
+            placeholder="City, Venue"
+            class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 placeholder-silver-500 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all"
+          />
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div>
+        <label for="message" class="block text-silver-300 text-sm font-medium mb-2">Message / Details</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          placeholder="Tell us about your event or session..."
+          class="w-full bg-navy-700 border border-silver-300/20 rounded-xl px-4 py-3 text-silver-100 placeholder-silver-500 focus:outline-none focus:border-silver-300 focus:shadow-[0_0_15px_rgba(192,192,192,0.15)] transition-all resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        id="submit-btn"
+        class="w-full bg-silver-100 text-navy-900 py-3.5 rounded-xl font-semibold text-base hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Send Booking Request
+      </button>
+
+      <!-- Status Messages -->
+      <div id="success-msg" class="hidden text-center text-green-400 py-3 bg-green-400/10 rounded-xl">
+        Booking request sent! We'll contact you within 24 hours.
+      </div>
+      <div id="error-msg" class="hidden text-center text-red-400 py-3 bg-red-400/10 rounded-xl">
+        Something went wrong. Please email us directly at jlliangracia.snaps@gmail.com
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  import emailjs from '@emailjs/browser';
+
+  document.getElementById('booking-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const btn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const successMsg = document.getElementById('success-msg');
+    const errorMsg = document.getElementById('error-msg');
+
+    // Hide previous messages
+    successMsg?.classList.add('hidden');
+    errorMsg?.classList.add('hidden');
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+      await emailjs.send(
+        import.meta.env.PUBLIC_EMAILJS_SERVICE_ID,
+        import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: (form.elements.namedItem('name') as HTMLInputElement).value,
+          from_email: (form.elements.namedItem('email') as HTMLInputElement).value,
+          phone: (form.elements.namedItem('phone') as HTMLInputElement).value,
+          service: (form.elements.namedItem('service') as HTMLSelectElement).value,
+          date: (form.elements.namedItem('date') as HTMLInputElement).value,
+          location: (form.elements.namedItem('location') as HTMLInputElement).value,
+          message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+        },
+        import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY
+      );
+      successMsg?.classList.remove('hidden');
+      form.reset();
+    } catch (err) {
+      errorMsg?.classList.remove('hidden');
+    } finally {
+      btn.textContent = 'Send Booking Request';
+      btn.disabled = false;
+    }
+  });
+</script>

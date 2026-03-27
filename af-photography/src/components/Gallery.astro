@@ -1,0 +1,155 @@
+---
+import { galleryImages } from '../data/gallery.js';
+
+const categories = ["all", "weddings", "portraits", "events", "commercial"];
+---
+
+<section id="gallery" class="py-20 md:py-28 bg-navy-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Heading -->
+    <h2 data-aos="fade-up" class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-12">
+      Our Work
+    </h2>
+
+    <!-- Filter Tabs -->
+    <div data-aos="fade-up" data-aos-delay="100" class="flex flex-wrap justify-center gap-3 mb-12">
+      {categories.map((cat) => (
+        <button
+          data-filter={cat}
+          class:list={[
+            "gallery-filter px-5 py-2 rounded-full text-sm font-medium transition-all capitalize",
+            cat === "all"
+              ? "bg-silver-100 text-navy-900"
+              : "bg-navy-700 text-silver-300 hover:bg-navy-700/80",
+          ]}
+        >
+          {cat === "all" ? "All" : cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Masonry Grid -->
+    <div id="gallery-grid" class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+      {galleryImages.map((image, index) => (
+        <a
+          href={image.src}
+          class:list={[
+            "glightbox gallery-item block overflow-hidden rounded-xl break-inside-avoid",
+            index >= 12 ? "hidden extra-item" : "",
+          ]}
+          data-gallery="portfolio"
+          data-category={image.category}
+          data-glightbox={`title: ${image.alt}`}
+        >
+          <div class="relative group bg-navy-700 aspect-[4/3] overflow-hidden">
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading="lazy"
+              decoding="async"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-silver-500 text-sm\'>' + this.alt + '</div>'"
+            />
+            <div class="absolute inset-0 bg-navy-900/0 group-hover:bg-navy-900/40 transition-colors duration-300 flex items-end">
+              <span class="text-white text-sm p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                {image.alt}
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Load More -->
+    <div class="text-center mt-12">
+      <button
+        id="load-more-btn"
+        class="border border-silver-300 text-silver-100 px-8 py-3 rounded-full font-semibold text-base hover:bg-silver-100 hover:text-navy-900 transition-all"
+      >
+        Load More
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  import GLightbox from 'glightbox';
+
+  // Initialize GLightbox
+  let lightbox = GLightbox({ selector: '.glightbox:not(.hidden)' });
+
+  // Filter functionality
+  const filterButtons = document.querySelectorAll('.gallery-filter');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      // Update button styles
+      filterButtons.forEach((b) => {
+        b.classList.remove('bg-silver-100', 'text-navy-900');
+        b.classList.add('bg-navy-700', 'text-silver-300');
+      });
+      btn.classList.remove('bg-navy-700', 'text-silver-300');
+      btn.classList.add('bg-silver-100', 'text-navy-900');
+
+      // Filter items
+      let visibleCount = 0;
+      galleryItems.forEach((item) => {
+        const category = item.getAttribute('data-category');
+        const isExtra = item.classList.contains('extra-item');
+        const matches = filter === 'all' || category === filter;
+
+        if (matches) {
+          visibleCount++;
+          // For "all" filter, respect load more state; for specific filters, show all
+          if (filter !== 'all' || !isExtra || loadedAll) {
+            item.classList.remove('hidden');
+          }
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      // Refresh lightbox
+      lightbox.destroy();
+      lightbox = GLightbox({ selector: '.glightbox:not(.hidden)' });
+
+      // Update load more button visibility
+      const loadMoreBtn = document.getElementById('load-more-btn');
+      if (filter !== 'all') {
+        loadMoreBtn?.classList.add('hidden');
+      } else {
+        loadMoreBtn?.classList.toggle('hidden', loadedAll);
+      }
+    });
+  });
+
+  // Load More functionality
+  let loadedAll = false;
+  const loadMoreBtn = document.getElementById('load-more-btn');
+
+  loadMoreBtn?.addEventListener('click', () => {
+    const hiddenExtras = document.querySelectorAll('.gallery-item.extra-item.hidden');
+    let count = 0;
+
+    hiddenExtras.forEach((item) => {
+      if (count < 8) {
+        item.classList.remove('hidden');
+        count++;
+      }
+    });
+
+    // Check if all items are now visible
+    const remainingHidden = document.querySelectorAll('.gallery-item.extra-item.hidden');
+    if (remainingHidden.length === 0) {
+      loadedAll = true;
+      loadMoreBtn.classList.add('hidden');
+    }
+
+    // Refresh lightbox
+    lightbox.destroy();
+    lightbox = GLightbox({ selector: '.glightbox:not(.hidden)' });
+  });
+</script>

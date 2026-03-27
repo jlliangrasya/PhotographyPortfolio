@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "A.F. Photography — We Shoot First, Ask Questions Later",
+  description = "Professional photography services by Aldrian Francis & Jillian Grace. Weddings, portraits, events, and commercial photography. Based in Southern Leyte, serving nationwide."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-navy-900 text-silver-100 font-body antialiased">
+    <slot />
+
+    <script>
+      import AOS from 'aos';
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out',
+        once: true,
+        offset: 80,
+      });
+    </script>
+  </body>
+</html>
